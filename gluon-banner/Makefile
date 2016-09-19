@@ -9,13 +9,10 @@ PKG_BUILD_DIR := $(BUILD_DIR)/$(PKG_NAME)
 include $(INCLUDE_DIR)/package.mk
 
 define Package/gluon-banner
-  SECTION:=eulenfunk
+  SECTION:=kiwinet
   CATEGORY:=Customization
   TITLE:=Banner file replacement
   DEPENDS:=+gluon-core +busybox
-  MAINTAINER:=Eulenfunk www.eulenfunk.de Andreas Dorfer
-  URL:=https://github.com/eulenfunk/packages
-  SOURCE:=https://github.com/eulenfunk/packages.git
 endef
 
 define Package/gluon-banner/description

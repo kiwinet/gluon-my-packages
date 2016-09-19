@@ -1,8 +1,8 @@
-              Freifunk Gluon Node      http://gluon.readthedocs.org/
+   2016 09    KiwiNET Šiauliai Node    http://gluon.readthedocs.org/
    ,     ,    based on OpenWrt         http://openwrt.org/
    )\___/(    powered by GNU/Linux     http://gnu.org/
   {(@)v(@)}   respect PPA guidelines   http://www.picopeer.net/
-   {|~~~|}    building mesh networks   http://freifunk.net/
-   {/^^^\}    network documentation    http://eulenfunk.de/
- ---`m-m`---  support needed?       -> http://forum.freifunk.net/
+   {|~~~|}    building mesh networks   http://kiwinet.eu/
+   {/^^^\}    network documentation    http://siauliai.kiwinet.eu/
+ ---`m-m`---  support needed?       -> http://forum.kiwinet.eu/
 for command line help type 'help' - for status info type 'nodeinfo'
