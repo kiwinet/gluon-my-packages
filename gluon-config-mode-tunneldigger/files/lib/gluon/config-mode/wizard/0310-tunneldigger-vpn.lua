@@ -15,50 +15,58 @@ function M.section(form)
   
   local o
 
-  o = s:option(cbi.Flag, "_meshvpnt", i18n.translate("Use internet connection (mesh VPN via L2TP)"))
+  o = s:option(cbi.Flag, "_meshvpn_t", i18n.translate("Use internet connection (mesh VPN via L2TP)"))
+  o:depends("_meshvpn", "0")
   o.default = uci:get_bool("tunneldigger", uci:get_first("tunneldigger", "broker"), "enabled") and o.enabled or o.disabled
   o.rmempty = false
 
-  o = s:option(cbi.Flag, "_limit_enabled", i18n.translate("Limit bandwidth"))
-  o:depends("_meshvpnt", "1")
+  o = s:option(cbi.Flag, "_limit_enabled_t", i18n.translate("Limit bandwidth"))
+  o:depends("_meshvpn_t", "1")
   o.default = uci:get_bool("simple-tc", "mesh_vpn", "enabled") and o.enabled or o.disabled
   o.rmempty = false
 
-  o = s:option(cbi.Value, "_limit_ingress", i18n.translate("Downstream (kbit/s)"))
-  o:depends("_limit_enabled", "1")
+  o = s:option(cbi.Value, "_limit_ingress_t", i18n.translate("Downstream (kbit/s)"))
+  o:depends("_limit_enabled_t", "1")
   o.value = uci:get("simple-tc", "mesh_vpn", "limit_ingress")
   o.rmempty = false
   o.datatype = "uinteger"
 
-  o = s:option(cbi.Value, "_limit_egress", i18n.translate("Upstream (kbit/s)"))
-  o:depends("_limit_enabled", "1")
+  o = s:option(cbi.Value, "_limit_egress_t", i18n.translate("Upstream (kbit/s)"))
+  o:depends("_limit_enabled_t", "1")
   o.value = uci:get("simple-tc", "mesh_vpn", "limit_egress")
   o.rmempty = false
   o.datatype = "uinteger"
 end
 
 function M.handle(data)
-  if data._meshvpnt ~= nil then
-    uci:set("fastd", "mesh_vpn", "enabled", "0")
-    uci:save("fastd")
-    uci:commit("fastd")
+  if data._meshvpn ~= nil then
+      uci:set("fastd", "mesh_vpn", "enabled", data._meshvpn)
+  else
+      uci:set("fastd", "mesh_vpn", "enabled", "0")
   end
-  uci:set("tunneldigger", uci:get_first("tunneldigger", "broker"), "enabled", data._meshvpnt)
+  uci:save("fastd")
+  uci:commit("fastd")
+  
+  if data._meshvpn_t ~= nil then
+     uci:set("tunneldigger", uci:get_first("tunneldigger", "broker"), "enabled", data._meshvpn_t)
+  else
+     uci:set("tunneldigger", uci:get_first("tunneldigger", "broker"), "enabled", "0")
+  end
   uci:save("tunneldigger")
   uci:commit("tunneldigger")
 
   -- checks for nil needed due to o:depends(...)
-  if data._limit_enabled ~= nil then
+  if data._limit_enabled_t ~= nil then
     uci:set("simple-tc", "mesh_vpn", "interface")
-    uci:set("simple-tc", "mesh_vpn", "enabled", data._limit_enabled)
+    uci:set("simple-tc", "mesh_vpn", "enabled", data._limit_enabled_t)
     uci:set("simple-tc", "mesh_vpn", "ifname", "mesh-vpn")
 
-    if data._limit_ingress ~= nil then
-      uci:set("simple-tc", "mesh_vpn", "limit_ingress", data._limit_ingress)
+    if data._limit_ingress_t ~= nil then
+      uci:set("simple-tc", "mesh_vpn", "limit_ingress", data._limit_ingress_t)
     end
 
-    if data._limit_egress ~= nil then
-      uci:set("simple-tc", "mesh_vpn", "limit_egress", data._limit_egress)
+    if data._limit_egress_t ~= nil then
+      uci:set("simple-tc", "mesh_vpn", "limit_egress", data._limit_egress_t)
     end
 
     uci:save("simple-tc")
