@@ -15,12 +15,12 @@ function M.section(form)
   
   local o
 
-  o = s:option(cbi.Flag, "_meshvpn", i18n.translate("Use internet connection (mesh VPN via L2TP)"))
+  o = s:option(cbi.Flag, "_meshvpnt", i18n.translate("Use internet connection (mesh VPN via L2TP)"))
   o.default = uci:get_bool("tunneldigger", uci:get_first("tunneldigger", "broker"), "enabled") and o.enabled or o.disabled
   o.rmempty = false
 
   o = s:option(cbi.Flag, "_limit_enabled", i18n.translate("Limit bandwidth"))
-  o:depends("_meshvpn", "1")
+  o:depends("_meshvpnt", "1")
   o.default = uci:get_bool("simple-tc", "mesh_vpn", "enabled") and o.enabled or o.disabled
   o.rmempty = false
 
@@ -28,17 +28,22 @@ function M.section(form)
   o:depends("_limit_enabled", "1")
   o.value = uci:get("simple-tc", "mesh_vpn", "limit_ingress")
   o.rmempty = false
-  o.datatype = "integer"
+  o.datatype = "uinteger"
 
   o = s:option(cbi.Value, "_limit_egress", i18n.translate("Upstream (kbit/s)"))
   o:depends("_limit_enabled", "1")
   o.value = uci:get("simple-tc", "mesh_vpn", "limit_egress")
   o.rmempty = false
-  o.datatype = "integer"
+  o.datatype = "uinteger"
 end
 
 function M.handle(data)
-  uci:set("tunneldigger", uci:get_first("tunneldigger", "broker"), "enabled", data._meshvpn)
+  if data._meshvpnt ~= nil then
+    uci:set("fastd", "mesh_vpn", "enabled", "0")
+    uci:save("fastd")
+    uci:commit("fastd")
+  end
+  uci:set("tunneldigger", uci:get_first("tunneldigger", "broker"), "enabled", data._meshvpnt)
   uci:save("tunneldigger")
   uci:commit("tunneldigger")
 

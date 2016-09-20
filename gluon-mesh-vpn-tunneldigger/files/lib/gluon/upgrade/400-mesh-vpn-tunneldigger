@@ -12,7 +12,7 @@ users.add_group('gluon-tunneldigger', 900)
 
 local enabled = uci:get_first('tunneldigger', 'broker', 'enabled')
 if (tonumber(enabled) == 0) then
-  enabled = site.tunneldigger_mesh_vpn.enabled and 1 or 0
+  enabled = site.tunneldigger_mesh_vpn.enabled and 0 or 1
 end
 
 -- Delete old broker config section       
@@ -35,13 +35,18 @@ uci:section('tunneldigger', 'broker', section,
 uci:save('tunneldigger')
 uci:commit('tunneldigger')
 
+local vpn_mtu = site.fastd_mesh_vpn.mtu 
+if (tonumber(enabled) == 1) then
+   vpn_mtu = site.tunneldigger_mesh_vpn.mtu
+end
+
 uci:section('network', 'interface', 'mesh_vpn',
 	  {
 		  ifname = 'mesh-vpn',
 		  proto = 'batadv',
 		  mesh = 'bat0',
 		  mesh_no_rebroadcast = 1,
-		  mtu = site.tunneldigger_mesh_vpn.mtu,
+		  mtu = vpn_mtu,
 	  }
 )
 
