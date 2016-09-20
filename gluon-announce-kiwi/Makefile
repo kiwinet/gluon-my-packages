@@ -11,7 +11,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/gluon-announce-kiwi
   SECTION:=gluon
   CATEGORY:=Gluon
-  DEPENDS:=+gluon-core +luci-lib-json +lua-ethtool-stats +gluon-announce
+  DEPENDS:=+gluon-core +luci-lib-json +lua-ethtool-stats 
   TITLE:=Addon Lua scripts announcing various additional information
 endef
 
