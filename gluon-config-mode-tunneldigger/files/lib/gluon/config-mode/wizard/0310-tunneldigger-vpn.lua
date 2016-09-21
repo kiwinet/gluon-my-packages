@@ -16,7 +16,7 @@ function M.section(form)
   local o
 
   o = s:option(cbi.Flag, "_meshvpn_t", i18n.translate("Use internet connection (mesh VPN via L2TP)"))
-  o:depends("_meshvpn", "0")
+  o:depends("_meshvpn", "")
   o.default = uci:get_bool("tunneldigger", uci:get_first("tunneldigger", "broker"), "enabled") and o.enabled or o.disabled
   o.rmempty = false
 
