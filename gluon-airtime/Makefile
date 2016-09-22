@@ -4,6 +4,7 @@ PKG_NAME:=gluon-airtime
 PKG_VERSION:=1.2
 
 PKG_BUILD_DIR := $(BUILD_DIR)/$(PKG_NAME)
+PKG_BUILD_DEPENDS := respondd
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -11,7 +12,7 @@ define Package/gluon-airtime
   SECTION:=gluon
   CATEGORY:=Gluon
   TITLE:=Airtime reporter
-  DEPENDS:=+gluon-core +micrond +gluon-respondd
+  DEPENDS:=+gluon-core +libgluonutil +micrond 
 endef
 
 define Build/Prepare
@@ -23,14 +24,13 @@ define Build/Configure
 endef
 
 define Build/Compile
+	$(call Build/Compile/Default)
 endef
 
 define Package/gluon-airtime/install
-        $(CP) ./files/* $(1)/
-
+	$(CP) ./files/* $(1)/
 	$(INSTALL_DIR) $(1)/lib/gluon/respondd
 	$(CP) $(PKG_BUILD_DIR)/respondd.so $(1)/lib/gluon/respondd/airtime.so
-	
 endef
 
 $(eval $(call BuildPackage,gluon-airtime))
