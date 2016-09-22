@@ -8,6 +8,12 @@ if [ $uptime -lt 300 ]; then
   exit 0
 fi
 
+# get actual airtime
+channel=$(iw client0 survey dump |grep "in use" -A5|grep -o "24.."|head -n1)
+total=$(iw client0 survey dump |grep "in use" -A5|grep active|grep -o "[0-9]*")
+tx=$(iw client0 survey dump |grep "in use" -A5|grep transmit|grep -o "[0-9]*")
+busy=$(iw client0 survey dump |grep "in use" -A5|grep busy|grep -o "[0-9]*")
+
 if [ ! -e /tmp/airtime.in ]; then
   echo "DEV2G=\"\""  > /tmp/airtime.in
   echo "DEV5G=\"\"" >> /tmp/airtime.in
@@ -51,3 +57,6 @@ if [ "X$DEV5G" != "X" ]; then
     echo $BUS_CUR > /tmp/bus5
   fi
 fi
+
+echo $((($channel - 2407 )/ 5)) > /tmp/channel2
+echo 'n/a' > /tmp/channel5
