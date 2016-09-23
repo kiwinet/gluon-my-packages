@@ -99,7 +99,7 @@ static struct json_object * airtime2(void) {
         if  (act2 > 0) {
                 rez= bus2 / act2;
         }
-        
+
         return json_object_new_double(rez);
 }
 
@@ -225,7 +225,7 @@ static struct json_object * txpower5(void) {
 static struct json_object * width2(void) {
         char *line = NULL;
         size_t len = 0;
-        char *width2 = '';
+        char *width2 = 'N/A';
 
         FILE *f = popen("iw dev client0 info | awk '/width/ {printf $6;}'", "r");
         if (f) {
@@ -256,7 +256,7 @@ static struct json_object * width2(void) {
 static struct json_object * width5(void) {
         char *line = NULL;
         size_t len = 0;
-        char *width5 = '';
+        char *width5 = 'N/A';
 
         FILE *f = popen("iw dev client1 info | awk '/width/ {printf $6;}'", "r");
         if (f) {
