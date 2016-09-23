@@ -30,26 +30,120 @@
 #include <libgluonutil.h>
 #include <libplatforminfo.h>
 
+#include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
 
 #include <uci.h>
 
+#include <sys/socket.h>
+#include <sys/un.h>
 #include <sys/utsname.h>
 #include <sys/vfs.h>
 
 static struct json_object * airtime2(void) {
-        double act2 = strtod(gluonutil_read_line("/tmp/act2"), NULL);
-        double bus2 = strtod(gluonutil_read_line("/tmp/bus2"), NULL);
-        
+        ssize_t r;
+        char *line = NULL;
+        size_t len = 0;
+        double act2;
+        double bus2;
+
+        FILE *f = popen("exec iw client0 survey dump |grep 'in use' -A5|grep active|grep -o '[0-9]*'", "r");
+        if (f) {
+                r = getline(&line, &len, f);
+        }
+        pclose(f);
+
+        if (r >= 0) {
+                len = strlen(line); /* The len given by getline is the buffer size, not the string length */
+
+                if (len && line[len-1] == '\n')
+                        line[len-1] = 0;
+
+                act2 = strtod(line, NULL);
+                free(line);
+                line = NULL;
+        }
+        else {
+                free(line);
+                line = NULL;
+        }
+
+        FILE *f = popen("exec iw client0 survey dump |grep 'in use' -A5|grep busy|grep -o '[0-9]*'", "r");
+        if (f) {
+                r = getline(&line, &len, f);
+        }
+        pclose(f);
+
+        if (r >= 0) {
+                len = strlen(line); /* The len given by getline is the buffer size, not the string length */
+
+                if (len && line[len-1] == '\n')
+                        line[len-1] = 0;
+
+                bus2 = strtod(line, NULL);
+                free(line);
+                line = NULL;
+        }
+        else {
+                free(line);
+                line = NULL;
+        }
+
+
         double rez = bus2 / act2;
         return json_object_new_double(rez);
 }
 
 static struct json_object * airtime5(void) {
-        double act5 = strtod(gluonutil_read_line("/tmp/act5"), NULL);
-        double bus5 = strtod(gluonutil_read_line("/tmp/bus5"), NULL);
+        ssize_t r;
+        char *line = NULL;
+        size_t len = 0;
+        double act5;
+        double bus5;
+
+        FILE *f = popen("exec iw client1 survey dump |grep 'in use' -A5|grep active|grep -o '[0-9]*'", "r");
+        if (f) {
+                r = getline(&line, &len, f);
+        }
+        pclose(f);
+
+        if (r >= 0) {
+                len = strlen(line); /* The len given by getline is the buffer size, not the string length */
+
+                if (len && line[len-1] == '\n')
+                        line[len-1] = 0;
+
+                act5 = strtod(line, NULL);
+                free(line);
+                line = NULL;
+        }
+        else {
+                free(line);
+                line = NULL;
+        }
+
+        FILE *f = popen("exec iw client1 survey dump |grep 'in use' -A5|grep busy|grep -o '[0-9]*'", "r");
+        if (f) {
+                r = getline(&line, &len, f);
+        }
+        pclose(f);
+
+        if (r >= 0) {
+                len = strlen(line); /* The len given by getline is the buffer size, not the string length */
+
+                if (len && line[len-1] == '\n')
+                        line[len-1] = 0;
+
+                bus5 = strtod(line, NULL);
+                free(line);
+                line = NULL;
+        }
+        else {
+                free(line);
+                line = NULL;
+        }
 
         double rez = bus5 / act5;
 
@@ -57,16 +151,67 @@ static struct json_object * airtime5(void) {
 }
 
 static struct json_object * chan2(void) {
-        char *chan2 = gluonutil_read_line("/tmp/channel2");
-        
+        ssize_t r;
+        char *line = NULL;
+        size_t len = 0;
+        char *chan2;
+
+        FILE *f = popen("exec iw dev client0 info | awk '/channel/ {printf $2;}'", "r");
+        if (f) {
+                r = getline(&line, &len, f);
+        }
+        pclose(f);
+
+        if (r >= 0) {
+                len = strlen(line); /* The len given by getline is the buffer size, not the string length */
+
+                if (len && line[len-1] == '\n')
+                        line[len-1] = 0;
+
+                chan2 = line;
+                free(line);
+                line = NULL;
+        }
+        else {
+                free(line);
+                line = NULL;
+        }
+
+
         return json_object_new_string(chan2);
 }
 
 static struct json_object * chan5(void) {
-        char *chan5 = gluonutil_read_line("/tmp/channel5");
-        
+        ssize_t r;
+        char *line = NULL;
+        size_t len = 0;
+        char *chan5;
+
+        FILE *f = popen("exec iw dev client1 info | awk '/channel/ {printf $2;}'", "r");
+        if (f) {
+                r = getline(&line, &len, f);
+        }
+        pclose(f);
+
+        if (r >= 0) {
+                len = strlen(line); /* The len given by getline is the buffer size, not the string length */
+
+                if (len && line[len-1] == '\n')
+                        line[len-1] = 0;
+
+                chan5 = line;
+                free(line);
+                line = NULL;
+        }
+        else {
+                free(line);
+                line = NULL;
+        }
+
+
         return json_object_new_string(chan5);
 }
+
 
 static struct json_object * respondd_provider_nodeinfo(void) {
         struct json_object *ret = json_object_new_object();
