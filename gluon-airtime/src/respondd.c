@@ -52,7 +52,7 @@ static struct json_object * airtime2(void) {
 
         FILE *f = popen("iw client0 survey dump |grep 'in use' -A5|grep busy|grep -o '[0-9]*'", "r");
         if (f) {
-                r = getline(&line, &len, f);
+                ssize_t r = getline(&line, &len, f);
 
                 if (r >= 0) {
                         len = strlen(line); /* The len given by getline is the buffer size, not the string length */
@@ -73,9 +73,9 @@ static struct json_object * airtime2(void) {
 
         FILE *f1 = popen("iw client0 survey dump |grep 'in use' -A5|grep active|grep -o '[0-9]*'", "r");
         if (f1) {
-                ssize_t r = getline(&line, &len, f1);
+                ssize_t r1 = getline(&line, &len, f1);
 
-                if (r >= 0) {
+                if (r1 >= 0) {
                         len = strlen(line); /* The len given by getline is the buffer size, not the string length */
 
                         if (len && line[len-1] == '\n')
@@ -103,7 +103,6 @@ static struct json_object * airtime2(void) {
 }
 
 static struct json_object * airtime5(void) {
-        ssize_t r;
         char *line = NULL;
         size_t len = 0;
         double act5;
@@ -111,7 +110,7 @@ static struct json_object * airtime5(void) {
 
         FILE *f = popen("iw client1 survey dump |grep 'in use' -A5|grep busy|grep -o '[0-9]*'", "r");
         if (f) {
-                r = getline(&line, &len, f);
+                ssize_t r = getline(&line, &len, f);
         }
         pclose(f);
 
@@ -132,11 +131,11 @@ static struct json_object * airtime5(void) {
 
         FILE *f1 = popen("iw client1 survey dump |grep 'in use' -A5|grep active|grep -o '[0-9]*'", "r");
         if (f1) {
-                r = getline(&line, &len, f1);
+                ssize_t r1 = getline(&line, &len, f1);
         }
         pclose(f1);
 
-        if (r >= 0) {
+        if (r1 >= 0) {
                 len = strlen(line); /* The len given by getline is the buffer size, not the string length */
 
                 if (len && line[len-1] == '\n')
@@ -163,12 +162,14 @@ static struct json_object * airtime5(void) {
 
 static struct json_object * chan2(void) {
 
-        const struct iwinfo_ops *iw = iwinfo_backend('client0');
+        const char *ifname = 'client0';
+
+        const struct iwinfo_ops *iw = iwinfo_backend(ifname);
         if (!iw)
                 return;
 
         int channel;
-        if (iw->channel('client0', &channel) < 0)
+        if (iw->channel(ifname, &channel) < 0)
                 return;
 
         return json_object_new_string(channel);
@@ -176,12 +177,14 @@ static struct json_object * chan2(void) {
 
 static struct json_object * chan5(void) {
 
-        const struct iwinfo_ops *iw = iwinfo_backend('client1');
+        const char *ifname = 'client1';
+
+        const struct iwinfo_ops *iw = iwinfo_backend(ifname);
         if (!iw)
                 return;
 
         int channel;
-        if (iw->channel('client1', &channel) < 0)
+        if (iw->channel(ifname, &channel) < 0)
                 return;
 
         return json_object_new_string(channel);
@@ -189,12 +192,14 @@ static struct json_object * chan5(void) {
 
 static struct json_object * txpower2(void) {
 
-        const struct iwinfo_ops *iw = iwinfo_backend('client0');
+        const char *ifname = 'client0';
+
+        const struct iwinfo_ops *iw = iwinfo_backend(ifname);
         if (!iw)
                 return;
 
         int txpower;
-        if (iw->txpower('client0', &txpower) < 0)
+        if (iw->txpower(ifname, &txpower) < 0)
                 return;
 
         return json_object_new_string(txpower);
@@ -202,12 +207,14 @@ static struct json_object * txpower2(void) {
 
 static struct json_object * txpower5(void) {
 
-        const struct iwinfo_ops *iw = iwinfo_backend('client1');
+        const char *ifname = 'client1';
+
+        const struct iwinfo_ops *iw = iwinfo_backend(ifname);
         if (!iw)
                 return;
 
         int txpower;
-        if (iw->txpower('client1', &txpower) < 0)
+        if (iw->txpower(ifname, &txpower) < 0)
                 return;
 
         return json_object_new_string(txpower);
@@ -277,12 +284,14 @@ static struct json_object * width5(void) {
 
 static struct json_object * cbrate2(void) {
 
-        const struct iwinfo_ops *iw = iwinfo_backend('client0');
+        const char *ifname = 'client0';
+
+        const struct iwinfo_ops *iw = iwinfo_backend(ifname);
         if (!iw)
                 return;
 
         int bitrate;
-        if (iw->bitrate('client0', &bitrate) < 0)
+        if (iw->bitrate(ifname, &bitrate) < 0)
                 return;
 
         return json_object_new_string(bitrate);
@@ -290,12 +299,14 @@ static struct json_object * cbrate2(void) {
 
 static struct json_object * cbrate5(void) {
 
-        const struct iwinfo_ops *iw = iwinfo_backend('client1');
+        const char *ifname = 'client1';
+
+        const struct iwinfo_ops *iw = iwinfo_backend(ifname);
         if (!iw)
                 return;
 
         int bitrate;
-        if (iw->bitrate('client1', &bitrate) < 0)
+        if (iw->bitrate(ifname, &bitrate) < 0)
                 return;
 
         return json_object_new_string(bitrate);
@@ -303,12 +314,14 @@ static struct json_object * cbrate5(void) {
 
 static struct json_object * mbrate2(void) {
 
-        const struct iwinfo_ops *iw = iwinfo_backend('ibss0');
+        const char *ifname = 'ibss0';
+
+        const struct iwinfo_ops *iw = iwinfo_backend(ifname);
         if (!iw)
                 return;
 
         int bitrate;
-        if (iw->bitrate('ibss0', &bitrate) < 0)
+        if (iw->bitrate(ifname, &bitrate) < 0)
                 return;
 
         return json_object_new_string(bitrate);
@@ -316,12 +329,14 @@ static struct json_object * mbrate2(void) {
 
 static struct json_object * mbrate5(void) {
 
-        const struct iwinfo_ops *iw = iwinfo_backend('ibss1');
+        const char *ifname = 'ibss1';
+
+        const struct iwinfo_ops *iw = iwinfo_backend(ifname);
         if (!iw)
                 return;
 
         int bitrate;
-        if (iw->bitrate('ibss1', &bitrate) < 0)
+        if (iw->bitrate(ifname, &bitrate) < 0)
                 return;
 
         return json_object_new_string(bitrate);
