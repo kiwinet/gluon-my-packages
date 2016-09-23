@@ -98,8 +98,7 @@ static struct json_object * airtime2(void) {
                 rez= bus2 / act2;
         }
 
-        struct json_object *ret = gluonutil_wrap_string(rez);
-        return ret;
+        return json_object_new_double(rez);
 }
 
 static struct json_object * airtime5(void) {
@@ -158,8 +157,7 @@ static struct json_object * airtime5(void) {
                 rez= bus5 / act5;
         }
 
-        struct json_object *ret = gluonutil_wrap_string(rez);
-        return ret;
+        return json_object_new_double(rez);
 }
 
 static struct json_object * chan2(void) {
@@ -174,8 +172,7 @@ static struct json_object * chan2(void) {
         if (iw->channel(ifname, &channel) < 0)
                 return;
 
-        struct json_object *ret = gluonutil_wrap_string(channel);
-        return ret;
+        return json_object_new_int(channel);
 }
 
 static struct json_object * chan5(void) {
@@ -190,8 +187,7 @@ static struct json_object * chan5(void) {
         if (iw->channel(ifname, &channel) < 0)
                 return;
 
-        struct json_object *ret = gluonutil_wrap_string(channel);
-        return ret;
+        return json_object_new_int(channel);
 }
 
 static struct json_object * txpower2(void) {
@@ -206,8 +202,7 @@ static struct json_object * txpower2(void) {
         if (iw->txpower(ifname, &txpower) < 0)
                 return;
 
-        struct json_object *ret = gluonutil_wrap_string(txpower);
-        return ret;
+        return json_object_new_int(txpower);
 }
 
 static struct json_object * txpower5(void) {
@@ -222,8 +217,7 @@ static struct json_object * txpower5(void) {
         if (iw->txpower(ifname, &txpower) < 0)
                 return;
 
-        struct json_object *ret = gluonutil_wrap_string(txpower);
-        return ret;
+        return json_object_new_double(txpower);
 }
 
 static struct json_object * width2(void) {
@@ -254,8 +248,7 @@ static struct json_object * width2(void) {
         pclose(f);
 
 
-        struct json_object *ret = gluonutil_wrap_string(width2);
-        return ret;
+        return json_object_new_string(width2);
 }
 
 static struct json_object * width5(void) {
@@ -286,8 +279,7 @@ static struct json_object * width5(void) {
         }
         pclose(f);
 
-        struct json_object *ret = gluonutil_wrap_string(width5);
-        return ret;
+        return json_object_new_string(width5);
 }
 
 static struct json_object * cbrate2(void) {
@@ -302,8 +294,7 @@ static struct json_object * cbrate2(void) {
         if (iw->bitrate(ifname, &bitrate) < 0)
                 return;
 
-        struct json_object *ret = gluonutil_wrap_string(bitrate);
-        return ret;
+        return json_object_new_int(bitrate);
 }
 
 static struct json_object * cbrate5(void) {
@@ -318,8 +309,7 @@ static struct json_object * cbrate5(void) {
         if (iw->bitrate(ifname, &bitrate) < 0)
                 return;
 
-        struct json_object *ret = gluonutil_wrap_string(bitrate);
-        return ret;
+        return json_object_new_int(bitrate);
 }
 
 static struct json_object * mbrate2(void) {
@@ -334,8 +324,7 @@ static struct json_object * mbrate2(void) {
         if (iw->bitrate(ifname, &bitrate) < 0)
                 return;
 
-        struct json_object *ret = gluonutil_wrap_string(bitrate);
-        return ret;
+        return json_object_new_int(bitrate);
 }
 
 static struct json_object * mbrate5(void) {
@@ -350,8 +339,7 @@ static struct json_object * mbrate5(void) {
         if (iw->bitrate(ifname, &bitrate) < 0)
                 return;
 
-        struct json_object *ret = gluonutil_wrap_string(bitrate);
-        return ret;
+        return json_object_new_int(bitrate);
 }
 
 static struct json_object * respondd_provider_nodeinfo(void) {
