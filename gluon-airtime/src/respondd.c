@@ -26,6 +26,8 @@
 
 #include <respondd.h>
 
+#include <iwinfo.h>
+
 #include <json-c/json.h>
 #include <libgluonutil.h>
 #include <libplatforminfo.h>
@@ -70,7 +72,7 @@ static struct json_object * airtime2(void) {
                 line = NULL;
         }
 
-        FILE *f = popen("exec iw client0 survey dump |grep 'in use' -A5|grep busy|grep -o '[0-9]*'", "r");
+        f = popen("exec iw client0 survey dump |grep 'in use' -A5|grep busy|grep -o '[0-9]*'", "r");
         if (f) {
                 r = getline(&line, &len, f);
         }
@@ -124,7 +126,7 @@ static struct json_object * airtime5(void) {
                 line = NULL;
         }
 
-        FILE *f = popen("exec iw client1 survey dump |grep 'in use' -A5|grep busy|grep -o '[0-9]*'", "r");
+        f = popen("exec iw client1 survey dump |grep 'in use' -A5|grep busy|grep -o '[0-9]*'", "r");
         if (f) {
                 r = getline(&line, &len, f);
         }
@@ -151,43 +153,64 @@ static struct json_object * airtime5(void) {
 }
 
 static struct json_object * chan2(void) {
-        ssize_t r;
-        char *line = NULL;
-        size_t len = 0;
-        char *chan2;
 
-        FILE *f = popen("exec iw dev client0 info | awk '/channel/ {printf $2;}'", "r");
-        if (f) {
-                r = getline(&line, &len, f);
-        }
-        pclose(f);
+        const struct iwinfo_ops *iw = iwinfo_backend('client0');
+        if (!iw)
+                return;
 
-        if (r >= 0) {
-                len = strlen(line); /* The len given by getline is the buffer size, not the string length */
+        int channel;
+        if (iw->channel('client0', &channel) < 0)
+                return;
 
-                if (len && line[len-1] == '\n')
-                        line[len-1] = 0;
-
-                chan2 = line;
-                free(line);
-                line = NULL;
-        }
-        else {
-                free(line);
-                line = NULL;
-        }
-
-
-        return json_object_new_string(chan2);
+        return json_object_new_string(channel);
 }
 
 static struct json_object * chan5(void) {
+
+        const struct iwinfo_ops *iw = iwinfo_backend('client1');
+        if (!iw)
+                return;
+
+        int channel;
+        if (iw->channel('client1', &channel) < 0)
+                return;
+
+        return json_object_new_string(channel);
+}
+
+static struct json_object * txpower2(void) {
+
+        const struct iwinfo_ops *iw = iwinfo_backend('client0');
+        if (!iw)
+                return;
+
+        int txpower;
+        if (iw->txpower('client0', &txpower) < 0)
+                return;
+
+        return json_object_new_string(txpower);
+}
+
+static struct json_object * txpower5(void) {
+
+        const struct iwinfo_ops *iw = iwinfo_backend('client1');
+        if (!iw)
+                return;
+
+        int txpower;
+        if (iw->txpower('client1', &txpower) < 0)
+                return;
+
+        return json_object_new_string(txpower);
+}
+
+static struct json_object * width2(void) {
         ssize_t r;
         char *line = NULL;
         size_t len = 0;
-        char *chan5;
+        char *width2;
 
-        FILE *f = popen("exec iw dev client1 info | awk '/channel/ {printf $2;}'", "r");
+        FILE *f = popen("exec iw dev client0 info | awk '/width/ {printf $6;}'", "r");
         if (f) {
                 r = getline(&line, &len, f);
         }
@@ -199,7 +222,7 @@ static struct json_object * chan5(void) {
                 if (len && line[len-1] == '\n')
                         line[len-1] = 0;
 
-                chan5 = line;
+                width2 = line;
                 free(line);
                 line = NULL;
         }
@@ -209,9 +232,91 @@ static struct json_object * chan5(void) {
         }
 
 
-        return json_object_new_string(chan5);
+        return json_object_new_string(width2);
 }
 
+static struct json_object * width5(void) {
+        ssize_t r;
+        char *line = NULL;
+        size_t len = 0;
+        char *width5;
+
+        FILE *f = popen("exec iw dev client1 info | awk '/width/ {printf $6;}'", "r");
+        if (f) {
+                r = getline(&line, &len, f);
+        }
+        pclose(f);
+
+        if (r >= 0) {
+                len = strlen(line); /* The len given by getline is the buffer size, not the string length */
+
+                if (len && line[len-1] == '\n')
+                        line[len-1] = 0;
+
+                width5 = line;
+                free(line);
+                line = NULL;
+        }
+        else {
+                free(line);
+                line = NULL;
+        }
+
+
+        return json_object_new_string(width5);
+}
+
+static struct json_object * cbrate2(void) {
+
+        const struct iwinfo_ops *iw = iwinfo_backend('client0');
+        if (!iw)
+                return;
+
+        int bitrate;
+        if (iw->bitrate('client0', &bitrate) < 0)
+                return;
+
+        return json_object_new_string(bitrate);
+}
+
+static struct json_object * cbrate5(void) {
+
+        const struct iwinfo_ops *iw = iwinfo_backend('client1');
+        if (!iw)
+                return;
+
+        int bitrate;
+        if (iw->bitrate('client1', &bitrate) < 0)
+                return;
+
+        return json_object_new_string(bitrate);
+}
+
+static struct json_object * mbrate2(void) {
+
+        const struct iwinfo_ops *iw = iwinfo_backend('ibss0');
+        if (!iw)
+                return;
+
+        int bitrate;
+        if (iw->bitrate('ibss0', &bitrate) < 0)
+                return;
+
+        return json_object_new_string(bitrate);
+}
+
+static struct json_object * mbrate5(void) {
+
+        const struct iwinfo_ops *iw = iwinfo_backend('ibss1');
+        if (!iw)
+                return;
+
+        int bitrate;
+        if (iw->bitrate('ibss1', &bitrate) < 0)
+                return;
+
+        return json_object_new_string(bitrate);
+}
 
 static struct json_object * respondd_provider_nodeinfo(void) {
         struct json_object *ret = json_object_new_object();
@@ -227,8 +332,29 @@ static struct json_object * respondd_provider_nodeinfo(void) {
         return ret;
 }
 
+static struct json_object * respondd_provider_statistics(void) {
+        struct json_object *ret = json_object_new_object();
+
+        struct json_object *wireless = json_object_new_object();
+        json_object_object_add(wireless, "airtime2", airtime2());
+        json_object_object_add(wireless, "airtime5", airtime5());
+        json_object_object_add(wireless, "txpower2", txpower2());
+        json_object_object_add(wireless, "txpower5", txpower5());
+        json_object_object_add(wireless, "width2", width2());
+        json_object_object_add(wireless, "width5", width5());
+        json_object_object_add(wireless, "cbrate2", cbrate2());
+        json_object_object_add(wireless, "cbrate5", cbrate5());
+        json_object_object_add(wireless, "mbrate2", mbrate2());
+        json_object_object_add(wireless, "mbrate5", mbrate5());
+
+        json_object_object_add(ret, "wireless", wireless);
+
+        return ret;
+}
+
 
 const struct respondd_provider_info respondd_providers[] = {
 	{"nodeinfo", respondd_provider_nodeinfo},
+        {"statistics", respondd_provider_statistics},
 	{}
 };
