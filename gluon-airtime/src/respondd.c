@@ -40,17 +40,17 @@
 #include <sys/vfs.h>
 
 static struct json_object * airtime2(void) {
-        double act2 = gluonutil_read_line("/tmp/act2");
-        double bus2 = gluonutil_read_line("/tmp/bus2");
+        char *act2 = gluonutil_read_line("/tmp/act2");
+        char *bus2 = gluonutil_read_line("/tmp/bus2");
         
-        return json_object_new_double(bus2 / act2);
+        return json_object_new_double((double)bus2 / (double)act2);
 }
 
 static struct json_object * airtime5(void) {
-        double act5 = gluonutil_read_line("/tmp/act5");
-        double bus5 = gluonutil_read_line("/tmp/bus5");
+        char *act5 = gluonutil_read_line("/tmp/act5");
+        char *bus5 = gluonutil_read_line("/tmp/bus5");
         
-        return json_object_new_double(bus5 / act5);
+        return json_object_new_double((double)bus5 / (double)act5);
 }
 
 static struct json_object * chan2(void) {
