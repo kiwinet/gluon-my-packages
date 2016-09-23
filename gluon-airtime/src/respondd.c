@@ -27,10 +27,8 @@
 #include <respondd.h>
 
 #include <iwinfo.h>
-
 #include <json-c/json.h>
 #include <libgluonutil.h>
-#include <libplatforminfo.h>
 
 #include <stdbool.h>
 #include <stdio.h>
@@ -100,7 +98,8 @@ static struct json_object * airtime2(void) {
                 rez= bus2 / act2;
         }
 
-        return json_object_new_double(rez);
+        struct json_object *ret = gluonutil_wrap_string(rez);
+        return ret;
 }
 
 static struct json_object * airtime5(void) {
@@ -159,7 +158,8 @@ static struct json_object * airtime5(void) {
                 rez= bus5 / act5;
         }
 
-        return json_object_new_double(rez);
+        struct json_object *ret = gluonutil_wrap_string(rez);
+        return ret;
 }
 
 static struct json_object * chan2(void) {
@@ -174,7 +174,8 @@ static struct json_object * chan2(void) {
         if (iw->channel(ifname, &channel) < 0)
                 return;
 
-        return json_object_new_string(channel);
+        struct json_object *ret = gluonutil_wrap_string(channel);
+        return ret;
 }
 
 static struct json_object * chan5(void) {
@@ -189,7 +190,8 @@ static struct json_object * chan5(void) {
         if (iw->channel(ifname, &channel) < 0)
                 return;
 
-        return json_object_new_string(channel);
+        struct json_object *ret = gluonutil_wrap_string(channel);
+        return ret;
 }
 
 static struct json_object * txpower2(void) {
@@ -204,7 +206,8 @@ static struct json_object * txpower2(void) {
         if (iw->txpower(ifname, &txpower) < 0)
                 return;
 
-        return json_object_new_string(txpower);
+        struct json_object *ret = gluonutil_wrap_string(txpower);
+        return ret;
 }
 
 static struct json_object * txpower5(void) {
@@ -219,7 +222,8 @@ static struct json_object * txpower5(void) {
         if (iw->txpower(ifname, &txpower) < 0)
                 return;
 
-        return json_object_new_string(txpower);
+        struct json_object *ret = gluonutil_wrap_string(txpower);
+        return ret;
 }
 
 static struct json_object * width2(void) {
@@ -250,7 +254,8 @@ static struct json_object * width2(void) {
         pclose(f);
 
 
-        return json_object_new_string(width2);
+        struct json_object *ret = gluonutil_wrap_string(width2);
+        return ret;
 }
 
 static struct json_object * width5(void) {
@@ -281,7 +286,8 @@ static struct json_object * width5(void) {
         }
         pclose(f);
 
-        return json_object_new_string(width5);
+        struct json_object *ret = gluonutil_wrap_string(width5);
+        return ret;
 }
 
 static struct json_object * cbrate2(void) {
@@ -296,7 +302,8 @@ static struct json_object * cbrate2(void) {
         if (iw->bitrate(ifname, &bitrate) < 0)
                 return;
 
-        return json_object_new_string(bitrate);
+        struct json_object *ret = gluonutil_wrap_string(bitrate);
+        return ret;
 }
 
 static struct json_object * cbrate5(void) {
@@ -311,7 +318,8 @@ static struct json_object * cbrate5(void) {
         if (iw->bitrate(ifname, &bitrate) < 0)
                 return;
 
-        return json_object_new_string(bitrate);
+        struct json_object *ret = gluonutil_wrap_string(bitrate);
+        return ret;
 }
 
 static struct json_object * mbrate2(void) {
@@ -326,7 +334,8 @@ static struct json_object * mbrate2(void) {
         if (iw->bitrate(ifname, &bitrate) < 0)
                 return;
 
-        return json_object_new_string(bitrate);
+        struct json_object *ret = gluonutil_wrap_string(bitrate);
+        return ret;
 }
 
 static struct json_object * mbrate5(void) {
@@ -341,15 +350,16 @@ static struct json_object * mbrate5(void) {
         if (iw->bitrate(ifname, &bitrate) < 0)
                 return;
 
-        return json_object_new_string(bitrate);
+        struct json_object *ret = gluonutil_wrap_string(bitrate);
+        return ret;
 }
 
 static struct json_object * respondd_provider_nodeinfo(void) {
         struct json_object *ret = json_object_new_object();
 
         struct json_object *wireless = json_object_new_object();
-        /*json_object_object_add(wireless, "airtime2", airtime2());*/
-        /*json_object_object_add(wireless, "airtime5", airtime5());*/
+        json_object_object_add(wireless, "airtime2", airtime2());
+        json_object_object_add(wireless, "airtime5", airtime5());
         json_object_object_add(wireless, "chan2", chan2());
         json_object_object_add(wireless, "chan5", chan5());
 
@@ -362,12 +372,12 @@ static struct json_object * respondd_provider_statistics(void) {
         struct json_object *ret = json_object_new_object();
 
         struct json_object *wireless = json_object_new_object();
-        /*json_object_object_add(wireless, "airtime2", airtime2());*/
-        /*json_object_object_add(wireless, "airtime5", airtime5());*/
+        json_object_object_add(wireless, "airtime2", airtime2());
+        json_object_object_add(wireless, "airtime5", airtime5());
         json_object_object_add(wireless, "txpower2", txpower2());
         json_object_object_add(wireless, "txpower5", txpower5());
-        /*json_object_object_add(wireless, "width2", width2());*/
-        /*json_object_object_add(wireless, "width5", width5());*/
+        json_object_object_add(wireless, "width2", width2());
+        json_object_object_add(wireless, "width5", width5());
         json_object_object_add(wireless, "cbrate2", cbrate2());
         json_object_object_add(wireless, "cbrate5", cbrate5());
         json_object_object_add(wireless, "mbrate2", mbrate2());

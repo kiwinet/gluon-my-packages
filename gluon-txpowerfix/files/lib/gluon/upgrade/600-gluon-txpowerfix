@@ -17,26 +17,27 @@ local function fix_radio(radio, index, config)
   local htmode = 'HT20'
   local is_ac
 
-  if type(config.require_mode) == string then
+  if type(config.require_mode) == 'string' then
     uci:set('wireless', radio, 'require_mode', config.require_mode)
   end
 
-  if type(config.htmode) == string then
+  if type(config.htmode) == 'string' then
     htmode = config.htmode
   end
 
-  if type(config.distance) == string then
+  if type(config.distance) == 'number' then
     uci:set('wireless', radio, 'distance', config.distance)
   end
 
   if config.purge_txpower then
-    if type(config.txpower) == string then
+    if type(config.txpower) == 'string' then
       uci:set('wireless', radio, 'txpower', config.txpower)
     else
       uci:set('wireless', radio, 'txpower', '20')
     end
   end
-  if type(config.country) == string then
+
+  if type(config.country) == 'string' then
     --- set country option
     uci:set('wireless', radio, 'country', config.country)
     --- don't tell the clients the country setting
@@ -60,13 +61,12 @@ local function fix_radio(radio, index, config)
         htmode = config.ac_htmode
       end
 
-      if type(config.mesh) == table and config.mesh.ac_disabled then
+      if type(config.mesh) == 'table' and config.mesh.ac_disabled then
         uci:set('wireless', 'mesh_' .. radio, 'disabled', '1')
       end
 
-      if type(config.ibss) == table and config.ibss.ac_disabled then
+      if type(config.ibss) == 'table' and config.ibss.ac_disabled then
           uci:set('wireless', 'ibss_' .. radio, 'disabled', '1')
-        end
       end
     end
   end
