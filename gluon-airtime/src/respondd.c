@@ -347,9 +347,9 @@ static struct json_object * respondd_provider_nodeinfo(void) {
 
         struct json_object *wireless = json_object_new_object();
         json_object_object_add(wireless, "airtime2", airtime2());
-        json_object_object_add(wireless, "airtime5", airtime5());
+        /*json_object_object_add(wireless, "airtime5", airtime5());*/
         json_object_object_add(wireless, "chan2", chan2());
-        json_object_object_add(wireless, "chan5", chan5());
+        /*json_object_object_add(wireless, "chan5", chan5());*/
 
         json_object_object_add(ret, "wireless", wireless);
 
@@ -361,15 +361,15 @@ static struct json_object * respondd_provider_statistics(void) {
 
         struct json_object *wireless = json_object_new_object();
         json_object_object_add(wireless, "airtime2", airtime2());
-        json_object_object_add(wireless, "airtime5", airtime5());
+        /*json_object_object_add(wireless, "airtime5", airtime5());*/
         json_object_object_add(wireless, "txpower2", txpower2());
-        json_object_object_add(wireless, "txpower5", txpower5());
+        /*json_object_object_add(wireless, "txpower5", txpower5());*/
         json_object_object_add(wireless, "width2", width2());
-        json_object_object_add(wireless, "width5", width5());
+        /*json_object_object_add(wireless, "width5", width5());*/
         json_object_object_add(wireless, "cbrate2", cbrate2());
-        json_object_object_add(wireless, "cbrate5", cbrate5());
+        /*json_object_object_add(wireless, "cbrate5", cbrate5());*/
         json_object_object_add(wireless, "mbrate2", mbrate2());
-        json_object_object_add(wireless, "mbrate5", mbrate5());
+        /*json_object_object_add(wireless, "mbrate5", mbrate5());*/
 
         json_object_object_add(ret, "wireless", wireless);
 

@@ -30,11 +30,10 @@ local function fix_radio(radio, index, config)
   end
 
   if config.purge_txpower then
-    if type(config.txpower) == 'string' then
-      uci:set('wireless', radio, 'txpower', config.txpower)
-    else
-      uci:set('wireless', radio, 'txpower', '20')
-    end
+    uci:set('wireless', radio, 'txpower', '20')
+  end
+  if type(config.tx_power) == 'number' then
+    uci:set('wireless', radio, 'txpower', config.tx_power)
   end
 
   if type(config.country) == 'string' then
