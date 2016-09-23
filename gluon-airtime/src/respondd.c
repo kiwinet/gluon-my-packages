@@ -47,8 +47,9 @@
 static struct json_object * airtime2(void) {
         char *line = NULL;
         size_t len = 0;
-        double act2;
-        double bus2;
+        double act2 = 0;
+        double bus2 = 0;
+        double rez = 0;
 
         FILE *f = popen("iw client0 survey dump |grep 'in use' -A5|grep busy|grep -o '[0-9]*'", "r");
         if (f) {
@@ -63,6 +64,7 @@ static struct json_object * airtime2(void) {
                         bus2 = strtod(line, NULL);
                         free(line);
                         line = NULL;
+                        len = 0;
                 }
                 else {
                         free(line);
@@ -84,6 +86,7 @@ static struct json_object * airtime2(void) {
                         act2 = strtod(line, NULL);
                         free(line);
                         line = NULL;
+                        len = 0;
                 }
                 else {
                         free(line);
@@ -93,68 +96,67 @@ static struct json_object * airtime2(void) {
         }
         pclose(f1);
 
-        double rez;
         if  (act2 > 0) {
                 rez= bus2 / act2;
-        } else {
-                rez = 0;
         }
+        
         return json_object_new_double(rez);
 }
 
 static struct json_object * airtime5(void) {
         char *line = NULL;
         size_t len = 0;
-        double act5;
-        double bus5;
+        double act5 = 0;
+        double bus5 = 0;
+        double rez = 0;
 
         FILE *f = popen("iw client1 survey dump |grep 'in use' -A5|grep busy|grep -o '[0-9]*'", "r");
         if (f) {
                 ssize_t r = getline(&line, &len, f);
+
+                if (r >= 0) {
+                        len = strlen(line); /* The len given by getline is the buffer size, not the string length */
+
+                        if (len && line[len-1] == '\n')
+                                line[len-1] = 0;
+
+                        bus5 = strtod(line, NULL);
+                        free(line);
+                        line = NULL;
+                        len = 0;
+                }
+                else {
+                        free(line);
+                        line = NULL;
+                }
         }
         pclose(f);
-
-        if (r >= 0) {
-                len = strlen(line); /* The len given by getline is the buffer size, not the string length */
-
-                if (len && line[len-1] == '\n')
-                        line[len-1] = 0;
-
-                bus5 = strtod(line, NULL);
-                free(line);
-                line = NULL;
-        }
-        else {
-                free(line);
-                line = NULL;
-        }
 
         FILE *f1 = popen("iw client1 survey dump |grep 'in use' -A5|grep active|grep -o '[0-9]*'", "r");
         if (f1) {
                 ssize_t r1 = getline(&line, &len, f1);
+
+                if (r1 >= 0) {
+                        len = strlen(line); /* The len given by getline is the buffer size, not the string length */
+
+                        if (len && line[len-1] == '\n')
+                                line[len-1] = 0;
+
+                        act5 = strtod(line, NULL);
+                        free(line);
+                        line = NULL;
+                        len = 0;
+                }
+                else {
+                        free(line);
+                        line = NULL;
+                }
+
         }
         pclose(f1);
 
-        if (r1 >= 0) {
-                len = strlen(line); /* The len given by getline is the buffer size, not the string length */
-
-                if (len && line[len-1] == '\n')
-                        line[len-1] = 0;
-
-                act5 = strtod(line, NULL);
-                free(line);
-                line = NULL;
-        }
-        else {
-                free(line);
-                line = NULL;
-        }
-
-        double rez;
         if  (act5 > 0) {
                 rez= bus5 / act5;
-        } else {
-                rez = 0;
         }
 
         return json_object_new_double(rez);
@@ -221,63 +223,63 @@ static struct json_object * txpower5(void) {
 }
 
 static struct json_object * width2(void) {
-        ssize_t r;
         char *line = NULL;
         size_t len = 0;
-        char *width2;
+        char *width2 = '';
 
         FILE *f = popen("iw dev client0 info | awk '/width/ {printf $6;}'", "r");
         if (f) {
-                r = getline(&line, &len, f);
+                ssize_t r = getline(&line, &len, f);
+
+                if (r >= 0) {
+                        len = strlen(line); /* The len given by getline is the buffer size, not the string length */
+
+                        if (len && line[len-1] == '\n')
+                                line[len-1] = 0;
+
+                        width2 = line;
+                        free(line);
+                        line = NULL;
+                        len = 0;
+                }
+                else {
+                        free(line);
+                        line = NULL;
+                }
         }
         pclose(f);
-
-        if (r >= 0) {
-                len = strlen(line); /* The len given by getline is the buffer size, not the string length */
-
-                if (len && line[len-1] == '\n')
-                        line[len-1] = 0;
-
-                width2 = line;
-                free(line);
-                line = NULL;
-        }
-        else {
-                free(line);
-                line = NULL;
-        }
 
 
         return json_object_new_string(width2);
 }
 
 static struct json_object * width5(void) {
-        ssize_t r;
         char *line = NULL;
         size_t len = 0;
-        char *width5;
+        char *width5 = '';
 
         FILE *f = popen("iw dev client1 info | awk '/width/ {printf $6;}'", "r");
         if (f) {
-                r = getline(&line, &len, f);
+                ssize_t r = getline(&line, &len, f);
+
+                if (r >= 0) {
+                        len = strlen(line); /* The len given by getline is the buffer size, not the string length */
+
+                        if (len && line[len-1] == '\n')
+                                line[len-1] = 0;
+
+                        width5 = line;
+                        free(line);
+                        line = NULL;
+                        len = 0;
+                }
+                else {
+                        free(line);
+                        line = NULL;
+                }
+
         }
         pclose(f);
-
-        if (r >= 0) {
-                len = strlen(line); /* The len given by getline is the buffer size, not the string length */
-
-                if (len && line[len-1] == '\n')
-                        line[len-1] = 0;
-
-                width5 = line;
-                free(line);
-                line = NULL;
-        }
-        else {
-                free(line);
-                line = NULL;
-        }
-
 
         return json_object_new_string(width5);
 }
