@@ -5,19 +5,26 @@ local uci = luci.model.uci.cursor()
 local M = {}
 
 function M.section(form)
-  local msg = i18n.translate('Your internet connection can be used to establish a ' ..
-                             'L2TP VPN connection with other nodes. ' ..
-                             'Enable this option if there are no other nodes reachable ' ..
-                             'over WLAN in your vicinity or you want to make a part of ' ..
-                             'your connection\'s bandwidth available for the network. You can limit how ' ..
-                             'much bandwidth the node will use at most.')
+  local msg = ''
+--  local msg = i18n.translate('Your internet connection can be used to establish a ' ..
+--                             'L2TP VPN connection with other nodes. ' ..
+--                             'Enable this option if there are no other nodes reachable ' ..
+--                             'over WLAN in your vicinity or you want to make a part of ' ..
+--                             'your connection\'s bandwidth available for the network. You can limit how ' ..
+--                             'much bandwidth the node will use at most.')
   local s = form:section(cbi.SimpleSection, nil, msg)
   
   local o
 
+  local fast_enabled = uci:get("fastd", "mesh_vpn", "enabled")
+
   o = s:option(cbi.Flag, "_meshvpn_t", i18n.translate("Use internet connection (mesh VPN via L2TP)"))
   o:depends("_meshvpn", "")
-  o.default = uci:get_bool("tunneldigger", uci:get_first("tunneldigger", "broker"), "enabled") and o.enabled or o.disabled
+  if fast_enabled == '' then
+    o.default = uci:get_bool("tunneldigger", uci:get_first("tunneldigger", "broker"), "enabled") and o.enabled or o.disabled
+  else
+    o.default = uci:get_bool("tunneldigger", uci:get_first("tunneldigger", "broker"), "enabled") and o.disabled or o.enabled
+  end
   o.rmempty = false
 
   o = s:option(cbi.Flag, "_limit_enabled_t", i18n.translate("Limit bandwidth"))

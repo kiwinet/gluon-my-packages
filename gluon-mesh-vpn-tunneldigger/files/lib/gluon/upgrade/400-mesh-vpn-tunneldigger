@@ -10,9 +10,16 @@ local lutil = require 'luci.util'
 -- Group for iptables rule
 users.add_group('gluon-tunneldigger', 900)
 
+-- get fastd status
+local fast_denabled = uci:get_first('fastd', 'mesh_vpn', 'enabled')
+
 local enabled = uci:get_first('tunneldigger', 'broker', 'enabled')
-if (tonumber(enabled) == 0) then
-  enabled = site.tunneldigger_mesh_vpn.enabled and 0 or 1
+if (tonumber(fast_enabled) == 1) then
+	enabled = 0
+else
+  if (tonumber(enabled) == 0) then
+    enabled = site.tunneldigger_mesh_vpn.enabled and 1 or 0
+  end
 end
 
 -- Delete old broker config section       
