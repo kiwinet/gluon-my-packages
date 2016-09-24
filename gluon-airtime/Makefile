@@ -12,7 +12,7 @@ define Package/gluon-airtime
   SECTION:=gluon
   CATEGORY:=Gluon
   TITLE:=Airtime reporter
-  DEPENDS:=+gluon-core +libgluonutil +micrond 
+  DEPENDS:=+gluon-core +libgluonutil +libiwinfo +kmod-dummy
 endef
 
 define Build/Prepare
@@ -28,7 +28,6 @@ define Build/Compile
 endef
 
 define Package/gluon-airtime/install
-	#$(CP) ./files/* $(1)/
 	$(INSTALL_DIR) $(1)/lib/gluon/respondd
 	$(CP) $(PKG_BUILD_DIR)/respondd.so $(1)/lib/gluon/respondd/airtime.so
 endef
