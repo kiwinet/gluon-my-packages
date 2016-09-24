@@ -19,6 +19,8 @@ local function fix_radio(radio, index, config)
 
   if type(config.require_mode) == 'string' then
     uci:set('wireless', radio, 'require_mode', config.require_mode)
+  else
+    uci:delete('wireless', radio, 'require_mode')
   end
 
   if type(config.htmode) == 'string' then
@@ -27,11 +29,16 @@ local function fix_radio(radio, index, config)
 
   if type(config.distance) == 'number' then
     uci:set('wireless', radio, 'distance', config.distance)
+  else
+    uci:delete('wireless', radio, 'distance')
   end
 
   if config.purge_txpower then
     uci:set('wireless', radio, 'txpower', '20')
+  else
+    uci:delete('wireless', radio, 'txpower')
   end
+  
   if type(config.tx_power) == 'number' then
     uci:set('wireless', radio, 'txpower', config.tx_power)
   end

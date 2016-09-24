@@ -74,13 +74,18 @@ static struct json_object * get_tunneldigger(void) {
 	return ret;
 }
 
+
 static struct json_object * respondd_provider_nodeinfo(void) {
 	struct json_object *ret = json_object_new_object();
-
 	struct json_object *software = json_object_new_object();
-	json_object_object_add(software, "tunneldigger", get_tunneldigger());
-	json_object_object_add(ret, "software", software);
 
+
+	struct json_object *get_tunnel = get_tunneldigger();
+	if (get_tunnel)
+		json_object_object_add(software, "tunneldigger", get_tunnel);
+
+
+	json_object_object_add(ret, "software", software);
 	return ret;
 }
 

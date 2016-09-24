@@ -20,10 +20,11 @@ function M.section(form)
 
   o = s:option(cbi.Flag, "_meshvpn_t", i18n.translate("Use internet connection (mesh VPN via L2TP)"))
   o:depends("_meshvpn", "")
-  if fast_enabled == '' then
-    o.default = uci:get_bool("tunneldigger", uci:get_first("tunneldigger", "broker"), "enabled") and o.enabled or o.disabled
+  if fast_enabled == '0' then
+ --   o.default = uci:get_bool("tunneldigger", uci:get_first("tunneldigger", "broker"), "enabled") and o.enabled or o.disabled
+    o.default = uci:get_bool("tunneldigger", uci:get_first("tunneldigger", "broker"), "enabled")
   else
-    o.default = uci:get_bool("tunneldigger", uci:get_first("tunneldigger", "broker"), "enabled") and o.disabled or o.enabled
+    o.default = o.disabled
   end
   o.rmempty = false
 
