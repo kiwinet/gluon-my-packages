@@ -92,6 +92,7 @@ local function fix_radio(radio, index, config)
   end
 end
 
+
 util.iterate_radios(fix_radio)
 
 uci:save('wireless')
