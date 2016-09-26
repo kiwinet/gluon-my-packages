@@ -84,6 +84,12 @@ local function fix_radio(radio, index, config)
   else
     uci:delete('wireless', radio, 'noscan')
   end
+
+  if type(config.rts_set) == 'number' then
+    uci:set('wireless', radio, 'rts', config.rts_set)
+  else
+    uci:delete('wireless', radio, 'rts')
+  end
 end
 
 util.iterate_radios(fix_radio)
