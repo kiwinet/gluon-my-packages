@@ -85,10 +85,34 @@ local function fix_radio(radio, index, config)
     uci:delete('wireless', radio, 'noscan')
   end
 
+  if config.nowmm then
+    uci:set('wireless', radio, 'wmm', '0')
+  else
+    uci:set('wireless', radio, 'wmm', '1')
+  end
+
   if type(config.rts_set) == 'number' then
+    if tonumber(config.rts_set) > 2346 then
+      config.rts_set = 2346
+    end
     uci:set('wireless', radio, 'rts', config.rts_set)
   else
-    uci:delete('wireless', radio, 'rts')
+    uci:set('wireless', radio, 'rts', 'off')
+  end
+
+  if type(config.frag_set) == 'number' then
+    if tonumber(config.frag_set) > 2346 then
+      config.frag_set = 2346
+    end
+    uci:set('wireless', radio, 'frag', config.frag_set)
+  else
+    uci:set('wireless', radio, 'frag', 'off')
+  end
+
+  if config.set_11w then
+    uci:set('wireless', radio, 'ieee80211w', '1')
+  else
+    uci:del('wireless', radio, 'ieee80211w')
   end
 end
 
