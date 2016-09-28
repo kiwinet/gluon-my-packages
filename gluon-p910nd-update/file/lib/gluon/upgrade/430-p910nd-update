@@ -1,0 +1,53 @@
+#!/usr/bin/lua
+
+local util = require 'gluon.util'
+
+local uci = require('luci.model.uci').cursor()
+local lutil = require 'luci.util'
+
+-- Delete old broker config section       
+uci:delete_all('p910nd', 'p910nd')
+
+local section = uci:add('p910nd', 'p910nd')
+
+uci:section('p910nd', 'p910nd', section,
+	  {
+		  enabled = '1',
+		  bidirectional = '0',
+		  port = '0',
+		  device = '/dev/usb/lp0',
+	  }
+)
+
+uci:save('p910nd')
+uci:commit('p910nd')
+
+local rule_set = false
+
+uci:foreach('firewall', 'rule', function (s)
+	if s['.type'] == 'rule' then
+		if s['.name'] == 'Printer' then
+			if s['.dest_port'] == '9100' then
+				rule_set = true
+			end
+		end
+	end
+end)
+
+if not rule_set then
+	
+	local firewall_rule = uci:add('firewall', 'rule')
+
+	uci:section('firewall', 'rule', firewall_rule,
+		  {
+			  src = 'lan',
+			  proto = 'tcp',
+			  dest_port = '9100',
+			  target = 'ACCEPT',
+			  name = 'PRINTER'
+		  }
+	)
+
+	uci:save('firewall')
+	uci:commit('firewall')
+end
