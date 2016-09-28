@@ -1,0 +1,41 @@
+#!/usr/bin/lua
+
+local util = require 'gluon.util'
+local uci = require('luci.model.uci').cursor()
+
+local wan_mac_enabled = uci:get_first('fixedmacs', 'wan', 'enabled')
+local wan_macaddress = uci:get_first('fixedmacs', 'wan', 'macaddr')
+local wan_o_macaddress = uci:get_first('fixedmacs', 'wan', 'macaddr_orig')
+local wan_orig_macaddress = uci:get_first('network', 'wan', 'macaddr')
+
+if wan_o_macaddress == nil then
+	uci:set('fixedmacs', 'wan', 'macaddr_orig', wan_orig_macaddress)
+	uci:save('fixedmacs')
+	uci:commit('fixedmacs')
+end
+
+-- set fixed wan mac address
+
+if wan_mac_enabled ~= nil then
+	if tonumber(wan_mac_enabled) ~= 0 then
+		if wan_macaddress ~= nil then
+			if wan_macaddress ~= '' then
+				if wan_macaddress ~= wan_o_macaddress then
+					if wan_macaddress ~= wan_orig_macaddress then
+						uci:set('network', 'wan', 'macaddr', wan_macaddress)
+					end
+				end
+			end
+		end
+	else 
+		if wan_o_macaddress ~= nil then
+			if wan_o_macaddress ~= '' then
+				if wan_orig_macaddress ~= wan_o_macaddress then
+					uci:set('network', 'wan', 'macaddr', wan_o_macaddress)
+				end
+			end
+		end
+	end
+	uci:save('network')
+	uci:commit('network')
+end

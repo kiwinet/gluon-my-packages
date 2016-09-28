@@ -1,0 +1,12 @@
+msgid ""
+msgstr "Content-Type: text/plain; charset=UTF-8"
+
+msgid "WAN port MAC address (xx:xx:xx:xx:xx:xx)"
+msgstr ""
+
+msgid "Enable fixed WAN mac address"
+msgstr ""
+
+msgid ""
+"You can set the WAN port fixed MAC address."
+msgstr ""

@@ -1,5 +1,13 @@
 #!/bin/sh
 
+# ... after at least 3 minutes of uptime have passed:
+uptime=`awk </proc/uptime 'BEGIN{uptime=0;} {uptime=sprintf("%d", $1);} END{print uptime;}'`
+if [ $uptime -lt 180 ]; then
+  echo "Waiting to pass 180 seconds of uptime for stabilizing."
+  exit 0
+fi
+
+
 # At first some Definitions:
 
 ONLINE_SSID=$(uci get wireless.client_radio0.ssid -q)

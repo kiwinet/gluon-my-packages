@@ -1,0 +1,22 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"PO-Revision-Date: 2015-10-07 00:32+0100\n"
+"Last-Translator: Andrej Sidorenko <avita@hostega.eu>\n"
+"Language-Team: Lithuanian\n"
+"Language: lt\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "WAN port MAC address (xx:xx:xx:xx:xx:xx)"
+msgstr "WAN porto MAC adresas (xx:xx:xx:xx:xx:xx)"
+
+msgid "Enable fixed WAN mac address"
+msgstr "Įjungti fiksuota MAC adresą"
+
+msgid ""
+"You can set the WAN port fixed MAC address."
+msgstr ""
+"Jus galite nurodyti fiksuotą WAN porto MAC adresą"
