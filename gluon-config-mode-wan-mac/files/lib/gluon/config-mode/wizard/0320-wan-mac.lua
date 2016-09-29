@@ -29,7 +29,9 @@ function M.handle(data)
   
   if data._fixedmac ~= nil then
      uci:set("fixedmacs", "wan", "enabled", data._fixedmac)
-     uci:set("fixedmacs", "wan", "macaddr", data._fixedmac_address)
+      if data._fixedmac == '1' then
+        uci:set("fixedmacs", "wan", "macaddr", data._fixedmac_address)
+      end
   end
   uci:save("fixedmacs")
   uci:commit("fixedmacs")
