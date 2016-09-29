@@ -22,19 +22,28 @@ uci:section('p910nd', 'p910nd', section,
 uci:save('p910nd')
 uci:commit('p910nd')
 
-local rule_set = false
+local rule_notset = true
+local g
+local g1
 
 uci:foreach('firewall', 'rule', function (s)
-	if s['.type'] == 'rule' then
-		if s['.name'] == 'Printer' then
-			if s['.dest_port'] == '9100' then
-				rule_set = true
+	if s['.type'] == 'rule' then                         
+        g = uci:get('firewall', s['.name'], 'name')          
+        if g ~= nil then                                     
+        	if g == 'PRINTER' then                            
+            	g1 = uci:get('firewall', s['.name'], 'dest_port')
+               	if g1 ~= nil then                            
+                	if g1 == '9100' then                         
+                    	rule_notset = false
+                    end
+                end
 			end
 		end
 	end
 end)
 
-if not rule_set then
+
+if rule_notset then
 	
 	local firewall_rule = uci:add('firewall', 'rule')
 
