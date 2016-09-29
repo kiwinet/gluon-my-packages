@@ -29,6 +29,7 @@ define Build/Compile
 endef
 
 define Package/gluon-config-mode-wan-mac/install
+	mkdir -p $(1)/etc/config/
 	$(CP) ./files/* $(1)/
 	$(call GluonInstallI18N,gluon-config-mode-wan-mac,$(1))
 	DIR=$(1) sh create-config.sh
