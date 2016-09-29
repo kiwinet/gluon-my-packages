@@ -31,6 +31,7 @@ endef
 define Package/gluon-config-mode-wan-mac/install
 	$(CP) ./files/* $(1)/
 	$(call GluonInstallI18N,gluon-config-mode-wan-mac,$(1))
+	DIR=$(1) sh create-config.sh
 endef
 
 $(eval $(call BuildPackage,gluon-config-mode-wan-mac))

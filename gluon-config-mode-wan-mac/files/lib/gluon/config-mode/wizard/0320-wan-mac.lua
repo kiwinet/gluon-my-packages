@@ -15,11 +15,13 @@ function M.section(form)
   o.default = uci:get_bool("fixedmacs", "wan", "enabled") and o.disabled or o.enabled
   o.rmempty = false
 
-  o = s:option(cbi.Flag, "_fixedmac_address", i18n.translate("WAN port MAC address (xx:xx:xx:xx:xx:xx)"))
+  o = s:option(cbi.Value, "_fixedmac_address", i18n.translate("WAN port MAC address"))
   o:depends("_fixedmac", "1")
   o.default = uci:get("fixedmacs", "wan", "macaddr")
   o.rmempty = false
   o.datatype = "string"
+  o.description = i18n.translate("xx:xx:xx:xx:xx:xx")
+  o.maxlen = 140
 
 end
 

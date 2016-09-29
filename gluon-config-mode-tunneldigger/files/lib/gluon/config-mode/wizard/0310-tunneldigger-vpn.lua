@@ -19,15 +19,12 @@ function M.section(form)
   local fast_enabled = uci:get("fastd", "mesh_vpn", "enabled")
 
   o = s:option(cbi.Flag, "_meshvpn_t", i18n.translate("Use internet connection (mesh VPN via L2TP)"))
-  o:depends("_meshvpn", false)
   o:depends("_meshvpn", "")
-  o:depends("_meshvpn", 0)
-  o:depends("_meshvpn", '0')
-  if fast_enabled == '0' then
+  if tonumber(fast_enabled) == 0 then
  --   o.default = uci:get_bool("tunneldigger", uci:get_first("tunneldigger", "broker"), "enabled") and o.enabled or o.disabled
-    o.default = uci:get_bool("tunneldigger", uci:get_first("tunneldigger", "broker"), "enabled") and o.enabled
+      o.default = uci:get_bool("tunneldigger", uci:get_first("tunneldigger", "broker"), "enabled") and o.enabled or o.disabled
   else
-    o.default = o.disabled
+    o.default = '0'
   end
   o.rmempty = false
 
