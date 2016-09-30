@@ -31,6 +31,7 @@ if wan_o_macaddress == nil then
 		uci:set('fixedmacs', 'wan', 'macaddr_orig', wan_orig_macaddress)
 		uci:save('fixedmacs')
 		uci:commit('fixedmacs')
+		wan_o_macaddress = wan_orig_macaddress
 	end
 end
 
