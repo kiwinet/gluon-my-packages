@@ -28,6 +28,7 @@ define Build/Compile
 endef
 
 define Package/gluon-p910nd-update/install
+	mkdir -p $(1)/etc/hotplug.d/usb
 	$(CP) ./files/* $(1)/
 endef
 

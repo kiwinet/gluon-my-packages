@@ -1,0 +1,29 @@
+FIRMWARE="/usr/lib/sihp1018.dl"
+DEVICE=/dev/usb/lp0
+PRINTER_NB=hp1018
+LOG=/tmp/p910nd.log
+
+echo "USB UID: $PRODUCT" >> LOG
+
+# hp1018
+if [ "$PRODUCT" = "3f0/4117/100" ]
+then
+case "$ACTION" in
+        add)
+        /etc/init.d/p910nd stop
+        /usr/bin/killall -KILL p9100d
+        /usr/bin/killall -KILL p910nd
+        echo "`date`: Sending firmware to printer $PRINTER_NB." >> $LOG
+	cat $FIRMWARE > $DEVICE
+	sleep 15
+        echo "`date`: Printer $PRINTER_NB added" >> $LOG
+        /etc/init.d/p910nd start 
+        echo "Done." >> $LOG
+        ;;
+        remove)
+        echo "`date`: Printer $PRINTER_NB removed" >> $LOG
+        /etc/init.d/p910nd stop
+        echo "Done." >> $LOG
+        ;;
+esac
+fi
