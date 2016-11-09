@@ -36,6 +36,9 @@ define Package/gluon-config-mode-site-select/install
 
 	lua -e 'print(require("cjson").encode(assert(loadfile("site_config.lua")("$(GLUON_SITEDIR)/extra/ksia.conf"))))' > $(1)/lib/gluon/site-select/ksia.json
 	lua -e 'print(require("cjson").encode(assert(loadfile("site_config.lua")("$(GLUON_SITEDIR)/extra/ksia-1.conf"))))' > $(1)/lib/gluon/site-select/ksia-1.json
+	lua -e 'print(require("cjson").encode(assert(loadfile("site_config.lua")("$(GLUON_SITEDIR)/extra/ksia-2.conf"))))' > $(1)/lib/gluon/site-select/ksia-2.json
+	lua -e 'print(require("cjson").encode(assert(loadfile("site_config.lua")("$(GLUON_SITEDIR)/extra/ksia-3.conf"))))' > $(1)/lib/gluon/site-select/ksia-3.json
+	lua -e 'print(require("cjson").encode(assert(loadfile("site_config.lua")("$(GLUON_SITEDIR)/extra/ksia-4.conf"))))' > $(1)/lib/gluon/site-select/ksia-4.json
 	DIR=$(1) sh create-config.sh
 	
 	$(call GluonInstallI18N,gluon-config-mode-site-select,$(1))
