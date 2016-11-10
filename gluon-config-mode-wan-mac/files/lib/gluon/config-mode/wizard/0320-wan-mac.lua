@@ -12,7 +12,7 @@ function M.section(form)
   local o
 
   o = s:option(cbi.Flag, "_fixedmac", i18n.translate("Enable fixed WAN mac address"))
-  o.default = uci:get_bool("fixedmacs", "wan", "enabled") and o.disabled or o.enabled
+  o.default = uci:get_bool("fixedmacs", "wan", "enabled") and o.enabled or o.disabled
   o.rmempty = false
 
   o = s:option(cbi.Value, "_fixedmac_address", i18n.translate("WAN port MAC address"))
