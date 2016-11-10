@@ -12,7 +12,7 @@ define Package/gluon-mesh-vpn-tunneldigger
   SECTION:=gluon
   CATEGORY:=Gluon
   TITLE:=Support for connecting batman-adv meshes via tunneltigger/l2tpv3 pseudowire
-  DEPENDS:=+gluon-core gluon-mesh-batman-adv +gluon-wan-dnsmasq +tunneldigger +iptables  +iptables-mod-extra +simple-tc
+  DEPENDS:=+gluon-core +libgluonutil gluon-mesh-batman-adv +gluon-wan-dnsmasq +tunneldigger +iptables  +iptables-mod-extra +simple-tc
 endef
 
 define Package/gluon-mesh-vpn-tunneldigger/description
