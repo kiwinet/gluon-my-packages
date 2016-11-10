@@ -5,13 +5,13 @@ local uci = luci.model.uci.cursor()
 local M = {}
 
 function M.section(form)
-  local msg = ''
---  local msg = i18n.translate('Your internet connection can be used to establish a ' ..
---                             'L2TP VPN connection with other nodes. ' ..
---                             'Enable this option if there are no other nodes reachable ' ..
---                             'over WLAN in your vicinity or you want to make a part of ' ..
---                             'your connection\'s bandwidth available for the network. You can limit how ' ..
---                             'much bandwidth the node will use at most.')
+--  local msg = ''
+  local msg = i18n.translate('Your internet connection can be used to establish a ' ..
+                             'L2TP VPN connection with other nodes. (Without encryption)' ..
+                             'Enable this option if there are no other nodes reachable ' ..
+                             'over WLAN in your vicinity or you want to make a part of ' ..
+                             'your connection\'s bandwidth available for the network. You can limit how ' ..
+                             'much bandwidth the node will use at most.')
   local s = form:section(cbi.SimpleSection, nil, msg)
   
   local o
@@ -20,11 +20,14 @@ function M.section(form)
 
   o = s:option(cbi.Flag, "_meshvpn_t", i18n.translate("Use internet connection (mesh VPN via L2TP)"))
   o:depends("_meshvpn", "")
-  if tonumber(fast_enabled) == 0 then
- --   o.default = uci:get_bool("tunneldigger", uci:get_first("tunneldigger", "broker"), "enabled") and o.enabled or o.disabled
+  if fast_enabled ~= nil then
+    if tonumber(fast_enabled) == 0 then
       o.default = uci:get_bool("tunneldigger", uci:get_first("tunneldigger", "broker"), "enabled") and o.enabled or o.disabled
+    else
+      o.default = '0'
+    end
   else
-    o.default = '0'
+    o.default = uci:get_bool("tunneldigger", uci:get_first("tunneldigger", "broker"), "enabled") and o.enabled or o.disabled
   end
   o.rmempty = false
 
@@ -47,16 +50,17 @@ function M.section(form)
 end
 
 function M.handle(data)
-  if data._meshvpn ~= nil then
+  if fast_enabled ~= nil then
+    if data._meshvpn ~= nil then
       uci:set("fastd", "mesh_vpn", "enabled", data._meshvpn)
-  else
+    else
       uci:set("fastd", "mesh_vpn", "enabled", "0")
+    end
+    uci:save("fastd")
+    uci:commit("fastd")
   end
-  uci:save("fastd")
-  uci:commit("fastd")
   
   if data._meshvpn_t ~= nil then
-
      uci:set("tunneldigger", uci:get_first("tunneldigger", "broker"), "enabled", data._meshvpn_t)
   else
      uci:set("tunneldigger", uci:get_first("tunneldigger", "broker"), "enabled", "0")

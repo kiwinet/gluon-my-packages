@@ -1,9 +1,9 @@
-   2016 09    KiwiNET Šiauliai Node    http://gluon.readthedocs.org/
-   ,     ,    based on OpenWrt         http://openwrt.org/
-   )\___/(    powered by GNU/Linux     http://gnu.org/
-  {(@)v(@)}   respect PPA guidelines   http://www.picopeer.net/
-   {|~~~|}    building mesh networks   http://kiwinet.eu/
-   {/^^^\}    network documentation    http://siauliai.kiwinet.eu/
- ---`m-m`---  support needed?       -> http://forum.kiwinet.eu/
+    v0.6.0    KiwiNET Šiauliai Node    http://siauliai.kiwinet.eu
+   ,     ,    vased on Gluon           http://gluon.readthedocs.org/
+   )\___/(    based on OpenWrt         http://openwrt.org/
+  {(@)v(@)}   powered by GNU/Linux     http://gnu.org/
+   {|~~~|}    respect PPA guidelines   http://www.picopeer.net/
+   {/^^^\}    building mesh networks   http://www.kiwinet.eu/
+ ---`m-m`---  network documentation    http://wiki.kiwinet.eu/
 
 for command line help type 'help' - for status info type 'nodeinfo'
