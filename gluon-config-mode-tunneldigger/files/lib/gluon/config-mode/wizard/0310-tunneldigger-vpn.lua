@@ -7,7 +7,7 @@ local M = {}
 function M.section(form)
 --  local msg = ''
   local msg = i18n.translate('Your internet connection can be used to establish a ' ..
-                             'L2TP VPN connection with other nodes. (Without encryption)' ..
+                             'L2TP VPN connection with other nodes. (Without encryption) ' ..
                              'Enable this option if there are no other nodes reachable ' ..
                              'over WLAN in your vicinity or you want to make a part of ' ..
                              'your connection\'s bandwidth available for the network. You can limit how ' ..
