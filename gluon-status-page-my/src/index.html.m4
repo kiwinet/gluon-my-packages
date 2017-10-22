@@ -13,5 +13,6 @@
     </script>
   </head>
   <body>
+    <noscript>Prašome įjungti Javascript palaikymą.</noscript>
   </body>
 </html>
