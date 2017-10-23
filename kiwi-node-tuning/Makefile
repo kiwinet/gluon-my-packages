@@ -1,6 +1,6 @@
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=ffho-node-tuning
+PKG_NAME:=kiwi-node-tuning
 PKG_VERSION:=1
 PKG_RELEASE:=$(GLUON_VERSION).$(GLUON_SITE_CODE)-$(GLUON_RELEASE).$(GLUON_CONFIG_VERSION)
 
@@ -8,17 +8,17 @@ PKG_BUILD_DIR := $(BUILD_DIR)/$(PKG_NAME)
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/ffho-node-tuning
-  SECTION:=ffho
+define Package/kiwi-node-tuning
+  SECTION:=kiwi
   CATEGORY:=Gluon
   TITLE:=Freifunk Hochstift Node Tuning-Settings
   DEPENDS:=+gluon-core +busybox
   MAINTAINER:=Freifunk Hochstift <maschinenraum@paderborn.freifunk.net>
-  URL:=https://git.c3pb.de/freifunk-pb/ffho-packages
-  SOURCE:=git@git.c3pb.de:freifunk-pb/ffho-packages.git
+  URL:=https://git.c3pb.de/freifunk-pb/kiwi-packages
+  SOURCE:=git@git.c3pb.de:freifunk-pb/kiwi-packages.git
 endef
 
-define Package/ffho-node-tuning/description
+define Package/kiwi-node-tuning/description
 	As its name states, this packages applies some config optimizations (like
 	tweaking kernal knobs via sysctl) on the nodes.
 	For the most knobs Gluon sticks for OpenWRT defaults for good reasons, as
@@ -38,12 +38,12 @@ endef
 define Build/Compile
 endef
 
-define Package/ffho-node-tuning/postinst
+define Package/kiwi-node-tuning/postinst
 endef
 
-define Package/ffho-node-tuning/install
+define Package/kiwi-node-tuning/install
 	$(INSTALL_DIR) $(1)/lib/gluon/upgrade/
 	$(INSTALL_BIN) ./files//lib/gluon/upgrade/* $(1)/lib/gluon/upgrade/
 endef
 
-$(eval $(call BuildPackage,ffho-node-tuning))
+$(eval $(call BuildPackage,kiwi-node-tuning))
