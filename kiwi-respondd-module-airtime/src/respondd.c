@@ -29,7 +29,7 @@ static struct json_object *respondd_provider_statistics(void) {
 		free(freeptr);
 	}
 
-	json_object_object_add(result, "wireless", wireless);
+	json_object_object_add(result, "wireless2", wireless);
 	return result;
 }
 
