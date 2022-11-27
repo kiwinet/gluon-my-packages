@@ -14,7 +14,7 @@ define Package/gluon-config-mode-tunneldigger
   SECTION:=gluon
   CATEGORY:=Gluon
   TITLE:=Toggle tunneldigger and bandwidth limit
-  DEPENDS:=gluon-config-mode-core-virtual +gluon-mesh-vpn-tunneldigger
+  DEPENDS:=gluon-config-mode-core +gluon-mesh-vpn-tunneldigger
 endef
 
 define Build/Prepare
