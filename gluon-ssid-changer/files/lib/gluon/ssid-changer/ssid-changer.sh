@@ -10,7 +10,7 @@ fi
 
 # At first some Definitions:
 
-ONLINE_SSID=$(uci get wireless.client_radio0.ssid -q)
+ONLINE_SSID=$(uci -q get wireless.client_radio0.ssid)
 : ${ONLINE_SSID:=KiwiNET}   # if for whatever reason ONLINE_SSID is NULL
 OFFLINE_PREFIX='Kiwi_OFFLINE_' # Use something short to leave space for the nodename
 
@@ -30,6 +30,11 @@ fi
 
 #Is there an active Gateway?
 GATEWAY_TQ=`batctl gwl | grep "^=>" | awk -F'[()]' '{print $2}'| tr -d " "` #Grep the Connection Quality of the Gateway which is currently used
+
+if [ ! $GATEWAY_TQ ];
+then
+	GATEWAY_TQ=`batctl gwl | grep "^*" | awk -F'[()]' '{print $2}'| tr -d " "`
+fi
 
 if [ ! $GATEWAY_TQ ]; #If there is no gateway there will be errors in the following if clauses
 then
