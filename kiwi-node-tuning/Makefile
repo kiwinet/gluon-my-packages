@@ -42,6 +42,8 @@ endef
 define Package/kiwi-node-tuning/install
 	$(INSTALL_DIR) $(1)/lib/gluon/upgrade/
 	$(INSTALL_BIN) ./files/lib/gluon/upgrade/* $(1)/lib/gluon/upgrade/
+	
+	$(INSTALL_DIR) $(1)/etc/sysctl.d/
 	$(INSTALL_BIN) ./files/etc/sysctl.d/* $(1)/etc/sysctl.d/
 endef
 
