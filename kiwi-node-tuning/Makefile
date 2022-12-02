@@ -11,11 +11,9 @@ include $(INCLUDE_DIR)/package.mk
 define Package/kiwi-node-tuning
   SECTION:=kiwi
   CATEGORY:=Gluon
-  TITLE:=Freifunk Hochstift Node Tuning-Settings
+  TITLE:=Kiwinet Node Tuning-Settings
   DEPENDS:=+gluon-core +busybox
-  MAINTAINER:=Freifunk Hochstift <maschinenraum@paderborn.freifunk.net>
-  URL:=https://git.c3pb.de/freifunk-pb/kiwi-packages
-  SOURCE:=git@git.c3pb.de:freifunk-pb/kiwi-packages.git
+  MAINTAINER:=Kiwinet <info@kiwinet.eu>
 endef
 
 define Package/kiwi-node-tuning/description
@@ -43,7 +41,8 @@ endef
 
 define Package/kiwi-node-tuning/install
 	$(INSTALL_DIR) $(1)/lib/gluon/upgrade/
-	$(INSTALL_BIN) ./files//lib/gluon/upgrade/* $(1)/lib/gluon/upgrade/
+	$(INSTALL_BIN) ./files/lib/gluon/upgrade/* $(1)/lib/gluon/upgrade/
+	$(INSTALL_BIN) ./files/etc/sysctl.d/* $(1)/etc/sysctl.d/
 endef
 
 $(eval $(call BuildPackage,kiwi-node-tuning))
