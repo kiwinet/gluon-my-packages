@@ -31,10 +31,10 @@ endef
 define Package/kiwi-additional-wifi-json-info/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_DIR) $(1)/lib/gluon/respondd
+	$(INSTALL_DIR) $(1)/usr/lib/respondd
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/libkiwi.so $(1)/usr/lib/
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/gluon/respondd/wireless.so $(1)/lib/gluon/respondd/
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/gluon/respondd/nexthop.so $(1)/lib/gluon/respondd/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/gluon/respondd/wireless.so $(1)/usr/lib/respondd/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/gluon/respondd/nexthop.so $(1)/usr/lib/respondd/
 endef
  
 $(eval $(call BuildPackage,kiwi-additional-wifi-json-info))
