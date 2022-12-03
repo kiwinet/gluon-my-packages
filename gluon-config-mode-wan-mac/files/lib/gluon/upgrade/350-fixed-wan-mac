@@ -1,9 +1,8 @@
 #!/usr/bin/lua
 
-local site = require 'gluon.site_config'
-local fs = require "nixio.fs"
+local site = require 'gluon.site'
 local util = require 'gluon.util'
-local uci = require('luci.model.uci').cursor()
+local uci = require('simple-uci').cursor()
 
 -- make /etc/config/currentsite persistent, if it isn't already
 local file = "/etc/sysupgrade.conf"
