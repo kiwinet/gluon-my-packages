@@ -38,6 +38,16 @@ local function fix_radio(radio, index, config)
   else
     uci:delete('wireless', radio, 'txpower')
   end
+
+  if type(config.require_mode) == 'string' then
+    if config.require_mode == 'n' || config.require_mode == 'ac' then
+      uci:set('wireless', radio, 'require_mode', config.require_mode)
+    else
+      uci:set('wireless', radio, 'require_mode', 'n')
+    end
+  else
+    uci:set('wireless', radio, 'require_mode', 'n')
+  end
   
   if type(config.tx_power) == 'number' then
     uci:set('wireless', radio, 'txpower', config.tx_power)
@@ -75,13 +85,13 @@ local function fix_radio(radio, index, config)
 
   uci:set('wireless', radio, 'htmode', htmode)
 
-  if config.htmode_noscan then
+  if config.htmode_noscan == '1' then
     uci:set('wireless', radio, 'noscan', '1')
   else
     uci:delete('wireless', radio, 'noscan')
   end
 
-  if config.nowmm then
+  if config.nowmm == '1' then
     uci:set('wireless', radio, 'wmm', '0')
   else
     uci:set('wireless', radio, 'wmm', '1')
