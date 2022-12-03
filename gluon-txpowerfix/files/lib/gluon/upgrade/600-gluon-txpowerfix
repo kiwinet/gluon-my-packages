@@ -1,8 +1,8 @@
 #!/usr/bin/lua
 
 local util = require 'gluon.util'
-
-local uci = require('luci.model.uci').cursor()
+local uci = require('simple-uci').cursor()
+local site = require 'gluon.site'
 
 local function cmd(_command)
   local f = io.popen(_command)
@@ -52,10 +52,6 @@ local function fix_radio(radio, index, config)
 
   --- band 2.4 GHz
   if hwmode == '11g' then
-
-    --- get rid of 802.11b rates
-    uci:set('wireless', radio, 'supported_rates', '9000 12000 18000 24000 36000 48000 54000')
-    uci:set('wireless', radio, 'basic_rate', '9000 18000 36000 54000')
 
   --- band 5 GHz
   elseif hwmode == '11a' then
@@ -116,8 +112,30 @@ local function fix_radio(radio, index, config)
   end
 end
 
+-- Iterate over all radios defined in UCI calling
+-- f(radio, index, site.wifiX) for each radio found while passing
+--  site.wifi24 for 2.4 GHz devices and site.wifi5 for 5 GHz ones.
+function iterate_radios(uci, f)
+        local radios = {}
 
-util.iterate_radios(fix_radio)
+        uci:foreach('wireless', 'wifi-device',
+        function(s)
+                table.insert(radios, s['.name'])
+        end
+        )
+
+        for index, radio in ipairs(radios) do
+                local hwmode = uci:get('wireless', radio, 'hwmode')
+
+                if hwmode == '11g' or hwmode == '11ng' then
+                        f(radio, index, site.wifi24)
+                elseif hwmode == '11a' or hwmode == '11na' then
+                        f(radio, index, site.wifi5)
+                end
+        end
+end
+
+iterate_radios(uci, fix_radio)
 
 uci:save('wireless')
 uci:commit('wireless')
