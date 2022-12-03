@@ -14,7 +14,7 @@ define Package/gluon-config-mode-wan-mac
   SECTION:=gluon
   CATEGORY:=Gluon
   TITLE:=We can set wan-br mac now
-  DEPENDS:=+gluon-core +gluon-config-mode-core
+  DEPENDS:=+gluon-core +gluon-config-mode-core +luci-base
 endef
 
 define Build/Prepare
