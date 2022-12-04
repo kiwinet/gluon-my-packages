@@ -20,45 +20,34 @@ if configured == false then
   f:close()
 end
 
-local wan_mac_enabled = uci:get('fixedmacs', 'wan', 'enabled')
+local wan_mac_enabled = uci:get_bool('fixedmacs', 'wan', 'enabled')
 local wan_macaddress = uci:get('fixedmacs', 'wan', 'macaddr')
-local wan_o_macaddress = uci:get('fixedmacs', 'wan', 'macaddr_orig')
-local wan_orig_macaddress = uci:get('network', 'wan', 'macaddr')
+local wan_base_macaddress = uci:get('fixedmacs', 'wan', 'base_macaddr')
+local wan_net_macaddress = uci:get('network', 'wan', 'macaddr')
 
-if wan_o_macaddress == nil then
-	if wan_orig_macaddress ~= nil then
-		uci:set('fixedmacs', 'wan', 'macaddr_orig', wan_orig_macaddress)
-		uci:save('fixedmacs')
-		uci:commit('fixedmacs')
-		wan_o_macaddress = wan_orig_macaddress
-	end
+if wan_base_macaddress == nil and wan_net_macaddress ~= nil then
+	uci:set('fixedmacs', 'wan', 'base_macaddr', wan_net_macaddress)
+	uci:save('fixedmacs')
+	uci:commit('fixedmacs')
+	wan_base_macaddress = wan_net_macaddress
 end
 
 -- set fixed wan mac address
-
-if wan_mac_enabled ~= nil then
-	if tonumber(wan_mac_enabled) ~= 0 then
-		if wan_macaddress ~= nil then
-			if wan_macaddress ~= '' then
-				if wan_macaddress ~= wan_o_macaddress then
-					if wan_macaddress ~= wan_orig_macaddress then
-						uci:set('network', 'wan', 'macaddr', wan_macaddress)
-					end
-				end
-			end
-		end
-	else 
-		if wan_o_macaddress ~= nil then
-			if wan_o_macaddress ~= '' then
-				if wan_orig_macaddress ~= wan_o_macaddress then
-					uci:set('network', 'wan', 'macaddr', wan_o_macaddress)
-					uci:delete('fixedmacs', 'wan', 'macaddr')
-					uci:save('fixedmacs')
-					uci:commit('fixedmacs')
-				end
-			end
-		end
+if wan_mac_enabled then
+	if wan_macaddress ~= nil or wan_macaddress ~= '' then
+		uci:set('network', 'wan', 'macaddr', wan_macaddress)
+	else
+		uci:set('network', 'wan', 'enabled', false)
+		uci:set('fixedmacs', 'wan', 'base_macaddr', wan_base_macaddress)
 	end
-	uci:save('network')
-	uci:commit('network')
+else
+	if wan_base_macaddress ~= nil and wan_base_macaddress ~= wan_net_macaddress then
+		uci:set('network', 'wan', 'macaddr', wan_base_macaddress)
+		uci:set('fixedmacs', 'wan', 'base_macaddr', wan_base_macaddress)
+	end
 end
+
+uci:save('fixedmacs')
+uci:save('network')
+uci:commit('fixedmacs')
+uci:commit('network')
